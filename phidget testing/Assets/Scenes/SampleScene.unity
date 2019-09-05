@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.4465791, g: 0.496414, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028526, g: 0.22571686, b: 0.3069236, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -55,7 +55,7 @@ LightmapSettings:
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
     serializedVersion: 12
-    m_Resolution: 2
+    m_Resolution: 10
     m_BakeResolution: 40
     m_AtlasSize: 1024
     m_AO: 0
@@ -412,6 +412,10 @@ MonoBehaviour:
   speed: 10
   scoreText: {fileID: 0}
   winText: {fileID: 0}
+  maxSpeed: 0
+  dragFactor: 0.98
+  tiltDown: 0
+  startPos: {x: 0, y: 0, z: 0}
 --- !u!54 &140365274
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2488,13 +2492,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4233752918119255732}
-  m_LocalRotation: {x: 0, y: 0.8959445, z: -0.4441661, w: 0}
+  m_LocalRotation: {x: 0, y: 0.953717, z: -0.30070576, w: 0}
   m_LocalPosition: {x: 0, y: 3.14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 52.74, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 35, y: 180, z: 0}
 --- !u!1 &4233752918119255732
 GameObject:
   m_ObjectHideFlags: 0
@@ -2559,10 +2563,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstacles: {fileID: 1347352430}
-  difMult: 40
-  speed: 40
+  difMult: 3
+  speed: 2
   scoreText: {fileID: 458322944}
   winText: {fileID: 2129545716}
+  maxSpeed: 0
+  dragFactor: 0.96
+  tiltDown: 2
+  startPos: {x: 0, y: 3, z: 0}
 --- !u!137 &4233752918119255737
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0

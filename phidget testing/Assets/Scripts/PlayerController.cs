@@ -12,20 +12,35 @@ public class PlayerController : MonoBehaviour
   public GameObject obstacles;
   public float difMult;
   public float speed;
+  public Text scoreText;
+  public Text winText;
+  public float maxSpeed;
+  public float dragFactor = 0.98f;
+
+  public float tiltDown;
+  public Vector3 startPos;
+
+  private Quaternion downRotation;
+  private Quaternion upRotation;
+
   private Rigidbody rb;
   private float vValue;
   private float psi;
   private float kPa;
   private float firstKpa;
   private int score;
-  public Text scoreText;
-  public Text winText;
+  private Vector3 forwardMovement;
+
+
 
   private VoltageRatioInput accel = new VoltageRatioInput();
 
 
+
   void Start(){
     rb = GetComponent<Rigidbody>();
+    downRotation = Quaternion.Euler(150,180,0);
+    upRotation = Quaternion.Euler(25,180,0);
     firstKpa = 0;
     score = 0;
     SetScoreText();
@@ -36,8 +51,10 @@ public class PlayerController : MonoBehaviour
     accel.Channel = 0;
     accel.HubPort = 0;
     accel.VoltageRatioChange += onVoltageRatioChange;
+    //accel.DataInterval = 10;
     //accel.SensorChange += onRatio_SensorChange;
     accel.Open(5000);
+    forwardMovement = new Vector3 (0, 0, -1*speed);
 
 
 
@@ -76,23 +93,29 @@ public class PlayerController : MonoBehaviour
     float difference = kPa - firstKpa;
     if (difference < 0.1){
       difference = 0;
+      rb.AddForce (forwardMovement, ForceMode.Impulse);
+      transform.rotation = Quaternion.Lerp(transform.rotation, downRotation, tiltDown * Time.deltaTime);
     } else {
-
-      rb.velocity = new Vector3(0, 0, rb.velocity.z);
-      Vector3 diffMovement = new Vector3 (0, difference*difMult, 0);
+      transform.rotation = Quaternion.Lerp(transform.rotation, upRotation, tiltDown * Time.deltaTime);
+      Vector3 diffMovement = new Vector3 (0, difference*difMult, -1*speed);
       rb.AddForce (diffMovement, ForceMode.Impulse);
     }
-    Debug.Log("difference" + difference + ", KPA: " + kPa + ", Score: " + score);
 
+    rb.velocity *= dragFactor;
+/*
     if (Input.GetKey(KeyCode.Space))
     {
+      transform.rotation = Quaternion.Lerp(transform.rotation, upRotation, tiltDown * Time.deltaTime);
       rb.velocity = new Vector3(0, 0, 0);
-      Vector3 spaceMovement = new Vector3 (0, 2*difMult, -1*speed);
+      Vector3 spaceMovement = new Vector3 (0, 3*difMult,-1*speed);
       rb.AddForce(spaceMovement, ForceMode.Impulse);
+    } else{
+      rb.AddForce (forwardMovement, ForceMode.Impulse);
+      transform.rotation = Quaternion.Lerp(transform.rotation, downRotation, tiltDown * Time.deltaTime);
     }
-
-    Vector3 movement = new Vector3 (0, 0, -1*speed);
-    rb.AddForce (movement);
+*/
+        Debug.Log("difference" + difference + ", KPA: " + kPa + ", Score: " + score + ", Speed: " + rb.velocity.z);
+    
     
   }
 
@@ -123,7 +146,7 @@ public class PlayerController : MonoBehaviour
   {
     scoreText.text = "Count: " + score.ToString();
     if(score >= 11){
-      winText.text = "FUCK YEAH";
+      winText.text = "WOOHOO";
     }
   }
 
